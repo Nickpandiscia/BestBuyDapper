@@ -28,6 +28,7 @@ namespace BestBuyCRUD
 
             #endregion
             DapperDepartmentRepository repo = new DapperDepartmentRepository(conn);
+            DapperProductRepository productRepository = new DapperProductRepository(conn);
 
             Console.WriteLine("Hello user. Here are the current departments:");
             Console.WriteLine("Please press enter . . .");
@@ -47,6 +48,32 @@ namespace BestBuyCRUD
                 Print(repo.GetAllDepartments());// Showing you that you actually put a record in the department table.
             }
 
+            Console.WriteLine("Here are the current products:");
+            Console.WriteLine("Please press enter . . .");
+            Console.ReadLine();
+            var products = productRepository.GetAllProducts();
+            Print2(products);
+
+            Console.WriteLine("Do you want to add a new product?");
+            string userAnswer = Console.ReadLine();
+
+            if(userAnswer.ToLower() == "yes")
+            {
+                Console.WriteLine($"What is the new product name?");
+                var prodName = Console.ReadLine();
+
+                Console.WriteLine($"What is the new product's price?");
+                var price = Convert.ToDouble(Console.ReadLine());
+
+                Console.WriteLine($"What is the new product's category id?");
+                var categoryID = Convert.ToInt32(Console.ReadLine());
+
+                productRepository.CreateProduct(prodName, price, categoryID);
+            }
+
+
+
+
             Console.WriteLine("Have a great day.");
 
 
@@ -60,6 +87,15 @@ namespace BestBuyCRUD
             {
                 Console.WriteLine($"ID: {depo.DepartmentID} Name: {depo.Name}");
             }
+        }
+
+        private static void Print2(IEnumerable<Product> prods)
+        {
+            foreach(var product in prods)
+            {
+                Console.WriteLine($"ProductID: {product.ProductID} Name: {product.Name} Price: {product.Price} CategoryID: {product.CategoryID} OnSale: {product.OnSale} StockLevel {product.StockLevel}");
+            }
+
         }
     }
 }
